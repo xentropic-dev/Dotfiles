@@ -9,8 +9,13 @@ vim.opt.colorcolumn = '80'
 vim.opt.shiftwidth = 4
 vim.opt.shiftround = true
 vim.opt.expandtab = true
-
+vim.opt.autoindent = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.signcolumn = "yes"
+vim.opt.cursorline = true
 vim.g.lazyvim_picker = "telescope"
+
 
 -- vim.api.nvim_create_augroup('FileTypeSetup', { clear = true })
 
