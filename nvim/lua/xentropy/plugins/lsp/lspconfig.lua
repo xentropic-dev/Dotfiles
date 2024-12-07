@@ -12,9 +12,6 @@ return {
 
         local keymap = vim.keymap -- for conciseness
 
-        -- MANUAL LSPS
-        local manual_servers = { "mojo" }
-
         vim.api.nvim_create_autocmd("LspAttach", {
             group = vim.api.nvim_create_augroup("UserLspConfig", {}),
             callback = function(ev)
@@ -95,18 +92,44 @@ return {
                             completion = {
                                 callSnippet = "Replace",
                             },
+                            runtime = {
+                                version = "LuaJIT",
+                                path = vim.split(package.path, ";"),
+                            },
+                            workspace = {
+                                library = { vim.env.VIMRUNTIME },
+                                checkThirdParty = false,
+                            },
+                            telemetry = {
+                                enable = false
+                            }
                         },
                     },
                 })
             end,
         })
 
-        -- setup manual servers
-        for _, server_name in ipairs(manual_servers) do
-            lspconfig[server_name].setup({
-                capabilities = capabilities,
-            })
+        -- Function to restart mojo LSP server if it crashes
+        local function restart_mojo_lsp()
+            -- Use `vim.schedule` to safely run the LspStart command
+            vim.schedule(function()
+                print("Restarting mojo-lsp-server...")
+                vim.cmd('LspStart mojo')
+            end)
         end
+
+        lspconfig.mojo.setup({
+            capabilities = capabilities,
+            -- This is a workaround for the fact that the mojo lsp server
+            -- keeps crashing in neovim as of 12/2024.  I have an open issue
+            -- but no progress is being made.
+            on_exit = function(_, code, _)
+                if code ~= 0 then
+                    print("mojo-lsp-server has crashed, restarting...")
+                    restart_mojo_lsp()
+                end
+            end,
+        })
 
         -- workaround for omnisharp semantic tokens...
         local omni_on_attach = function(client, bufnr)
