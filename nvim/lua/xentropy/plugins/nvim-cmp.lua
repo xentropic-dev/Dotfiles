@@ -9,13 +9,18 @@ local M = {
         "saadparwaiz1/cmp_luasnip",
         "L3MON4D3/LuaSnip",
         "onsails/lspkind-nvim",
+        "ray-x/nvim-autopairs"
     },
 }
 
 M.config = function()
     local cmp = require("cmp")
     local lspkind = require("lspkind")
+
+    local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+
     vim.opt.completeopt = { "menu", "menuone", "noselect" }
+    cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
     cmp.setup({
         snippet = {
             expand = function(args)
