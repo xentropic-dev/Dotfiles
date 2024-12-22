@@ -118,8 +118,18 @@ return {
             end)
         end
 
+        local util = require('lspconfig.util')
         lspconfig.mojo.setup({
             capabilities = capabilities,
+            root_dir = function(fname)
+                -- Use lspconfig's utility function to search for mojoproject.toml in parent directories
+                return util.root_pattern("mojoproject.toml")(fname) or util.find_git_ancestor(fname) or
+                    vim.fn.getcwd()
+            end,
+            -- Additional configuration (if needed)
+            on_attach = function(client, _)
+                print("Mojo LSP attached to " .. client.name)
+            end,
             -- This is a workaround for the fact that the mojo lsp server
             -- keeps crashing in neovim as of 12/2024.  I have an open issue
             -- but no progress is being made.

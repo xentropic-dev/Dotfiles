@@ -25,6 +25,7 @@ return {
                 "lua_ls",
                 "pyright",
                 "omnisharp",
+                "zls"
             },
             automatic_installation = true,
         })
