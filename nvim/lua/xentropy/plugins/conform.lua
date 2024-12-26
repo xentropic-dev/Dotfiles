@@ -20,6 +20,7 @@ return {
                 liquid = { "prettier" },
                 lua = { "stylua" },
                 python = { "isort", "black" },
+                zig = { "zigfmt" },
             },
             format_on_save = {
                 lsp_fallback = true,
