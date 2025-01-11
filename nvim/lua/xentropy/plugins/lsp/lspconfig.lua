@@ -234,6 +234,16 @@ return {
             analyze_open_documents_only = false,
             filetypes = { "cs", "vb", "csproj", "sln", "slnx", "csx", "targets", "razor" },
         })
+
+        lspconfig.zls.setup({
+            cmd = { "zls" },
+            settings = {
+                zls = {
+                    enable_build_on_save = true,
+                }
+            }
+
+        })
     end,
 
 }

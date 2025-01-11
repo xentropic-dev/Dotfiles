@@ -16,6 +16,10 @@ vim.opt.signcolumn = "yes"
 vim.opt.cursorline = true
 vim.g.lazyvim_picker = "telescope"
 
+-- remap
+vim.api.nvim_set_keymap('n', 'j', 'jzz', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'k', 'kzz', { noremap = true, silent = true })
+
 -- vim.api.nvim_create_augroup('FileTypeSetup', { clear = true })
 
 --vim.api.nvim_create_autocmd('BufRead,BufNewFile', {

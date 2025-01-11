@@ -2,14 +2,23 @@
 
 * {
     font-family: FantasqueSansMono Nerd Font;
-    font-size: 17px;
+    font-size: 12px;
     min-height: 0;
+}
+
+#window {
+    background-color: @surface0;
+    color: @text;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
 }
 
 #waybar {
     background: transparent;
     color: @text;
-    margin: 5px 5px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    opacity: 0.80;
 }
 
 #workspaces {
