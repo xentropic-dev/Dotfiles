@@ -8,7 +8,7 @@ return {
 			append_fname = false,
 			args = { "-f", "gh" },
 			stream = "stdout",
-			parser = function(output)
+			parser = function(output, bufnr)
 				local items = {}
 				-- get buffer by file name
 				for line in vim.gsplit(output, "\n") do
@@ -24,8 +24,8 @@ return {
 					end
 
 					if file and severity then
-						local bufnr = vim.fn.bufnr(file)
-						if bufnr > -1 then
+						local l_bufnr = vim.fn.bufnr(file)
+						if l_bufnr > -1 and l_bufnr == bufnr then
 							table.insert(items, {
 								lnum = tonumber(row) - 1,
 								col = tonumber(col) - 1,
