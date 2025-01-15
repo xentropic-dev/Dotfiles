@@ -7,7 +7,8 @@ return {
 			stdin = false,
 			append_fname = false,
 			args = { "-f", "gh" },
-			stream = "stdout",
+			stream = "both",
+			ignore_exitcode = true,
 			parser = function(output, bufnr)
 				local items = {}
 				-- get buffer by file name
@@ -29,7 +30,7 @@ return {
 							table.insert(items, {
 								lnum = tonumber(row) - 1,
 								col = tonumber(col) - 1,
-								message = message .. " (" .. file .. ")",
+								message = message,
 								source = "zlint",
 								bufnr = bufnr,
 								severity = severity,
