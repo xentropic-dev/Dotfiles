@@ -66,11 +66,28 @@ return {
 
 		-- Change the Diagnostic symbols in the sign column (gutter)
 		-- (not in youtube nvim video)
-		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-		for type, icon in pairs(signs) do
-			local hl = "DiagnosticSign" .. type
-			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-		end
+		vim.diagnostic.config({
+			signs = {
+				text = {
+					[vim.diagnostic.severity.ERROR] = " ",
+					[vim.diagnostic.severity.WARN] = " ",
+					[vim.diagnostic.severity.INFO] = " ",
+					[vim.diagnostic.severity.HINT] = "󰠠 ",
+				},
+				linehl = {
+					[vim.diagnostic.severity.ERROR] = "DiagnosticError",
+					[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
+					[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
+					[vim.diagnostic.severity.HINT] = "DiagnosticHint",
+				},
+				numhl = {
+					[vim.diagnostic.severity.ERROR] = "DiagnosticError",
+					[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
+					[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
+					[vim.diagnostic.severity.HINT] = "DiagnosticHint",
+				},
+			},
+		})
 
 		mason_lspconfig.setup_handlers({
 			-- default handler for installed servers
@@ -232,6 +249,9 @@ return {
 			enable_decompilation_support = true,
 			analyze_open_documents_only = false,
 			filetypes = { "cs", "vb", "csproj", "sln", "slnx", "csx", "targets", "razor" },
+			root_dir = function()
+				return vim.fn.getcwd()
+			end,
 		})
 
 		lspconfig.zls.setup({
