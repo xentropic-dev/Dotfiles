@@ -3,11 +3,16 @@ return {
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
 		"hrsh7th/cmp-nvim-lsp",
+		{
+			"folke/lazydev.nvim",
+			ft = "lua",
+			opts = {
+			}
+		},
 		{ "antosha417/nvim-lsp-file-operations", config = true },
 	},
 	config = function()
 		local lspconfig = require("lspconfig")
-		local mason_lspconfig = require("mason-lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
 		local keymap = vim.keymap -- for conciseness
@@ -74,12 +79,12 @@ return {
 					[vim.diagnostic.severity.INFO] = " ",
 					[vim.diagnostic.severity.HINT] = "󰠠 ",
 				},
-				linehl = {
-					[vim.diagnostic.severity.ERROR] = "DiagnosticError",
-					[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
-					[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
-					[vim.diagnostic.severity.HINT] = "DiagnosticHint",
-				},
+				-- linehl = {
+				-- 	[vim.diagnostic.severity.ERROR] = "DiagnosticError",
+				-- 	[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
+				-- 	[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
+				-- 	[vim.diagnostic.severity.HINT] = "DiagnosticHint",
+				-- },
 				numhl = {
 					[vim.diagnostic.severity.ERROR] = "DiagnosticError",
 					[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
@@ -87,43 +92,9 @@ return {
 					[vim.diagnostic.severity.HINT] = "DiagnosticHint",
 				},
 			},
-		})
-
-		mason_lspconfig.setup_handlers({
-			-- default handler for installed servers
-			function(server_name)
-				lspconfig[server_name].setup({
-					capabilities = capabilities,
-				})
-			end,
-			["lua_ls"] = function()
-				-- configure lua server (with special settings)
-				lspconfig["lua_ls"].setup({
-					capabilities = capabilities,
-					settings = {
-						Lua = {
-							-- make the language server recognize "vim" global
-							diagnostics = {
-								globals = { "vim" },
-							},
-							completion = {
-								callSnippet = "Replace",
-							},
-							runtime = {
-								version = "LuaJIT",
-								path = vim.split(package.path, ";"),
-							},
-							workspace = {
-								library = { vim.env.VIMRUNTIME },
-								checkThirdParty = false,
-							},
-							telemetry = {
-								enable = false,
-							},
-						},
-					},
-				})
-			end,
+			underline = true,
+			-- virtual_lines = true,
+			virtual_text = true,
 		})
 
 		-- Function to restart mojo LSP server if it crashes
@@ -263,6 +234,18 @@ return {
 			},
 		})
 
+		--lspconfig.ts_ls.setup({})
+
+		local ok, mason_registry = pcall(require, "mason-registry")
+		if not ok then
+			vim.notify("mason-registry could not be loaded")
+			return
+		end
+
 		lspconfig.ts_ls.setup({})
+
+		lspconfig.lua_ls.setup({
+			capabilities = capabilities,
+		})
 	end,
 }

@@ -5,7 +5,6 @@ return {
 	},
 	config = function()
 		local mason = require("mason")
-		local mason_lspconfig = require("mason-lspconfig")
 
 		mason.setup({
 			ui = {
@@ -17,18 +16,19 @@ return {
 			},
 		})
 
-		mason_lspconfig.setup({
+		require("mason-lspconfig").setup({
 			ensure_installed = {
 				"html",
+				"ts_ls",
 				"lua_ls",
 				"pyright",
 				"omnisharp",
+				"javascript",
 				"zls",
 				"prettier",
-				"yq",
 				"unocss-language-server",
+				"tailwindcss",
 			},
-			automatic_installation = true,
 		})
 	end,
 }
