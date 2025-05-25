@@ -6,6 +6,7 @@ return {
 
 		conform.setup({
 			formatters_by_ft = {
+				cs = { "csharpier" },
 				javascript = { "prettier" },
 				typescript = { "prettier" },
 				javascriptreact = { "prettier" },
@@ -36,5 +37,12 @@ return {
 				timeout_ms = 1000,
 			})
 		end, { desc = "Format file or range (in visual mode)" })
+
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			pattern = "*",
+			callback = function(args)
+				require("conform").format({ bufnr = args.buf })
+			end,
+		})
 	end,
 }

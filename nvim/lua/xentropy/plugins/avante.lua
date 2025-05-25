@@ -9,7 +9,7 @@ return {
 		mode = "agentic",
 		claude = {
 			endpoint = "https://api.anthropic.com",
-			model = "claude-3-5-sonnet-20241022", -- your desired model (or use gpt-4o, etc.)
+			model = "claude-3-7-sonnet-latest", -- your desired model (or use gpt-4o, etc.)
 			timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
 			temperature = 0,
 			max_tokens = 4096,
@@ -23,6 +23,7 @@ return {
 		"stevearc/dressing.nvim",
 		"nvim-lua/plenary.nvim",
 		"MunifTanjim/nui.nvim",
+		"ellisonleao/dotenv.nvim",
 		--- The below dependencies are optional,
 		"echasnovski/mini.pick", -- for file_selector provider mini.pick
 		"nvim-telescope/telescope.nvim", -- for file_selector provider telescope
