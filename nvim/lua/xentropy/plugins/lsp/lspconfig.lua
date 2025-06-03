@@ -68,34 +68,14 @@ return {
 		-- used to enable autocompletion (assign to every lsp server config)
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
-		-- Change the Diagnostic symbols in the sign column (gutter)
-		-- (not in youtube nvim video)
-		vim.diagnostic.config({
-			signs = {
-				text = {
-					[vim.diagnostic.severity.ERROR] = " ",
-					[vim.diagnostic.severity.WARN] = " ",
-					[vim.diagnostic.severity.INFO] = " ",
-					[vim.diagnostic.severity.HINT] = "󰠠 ",
-				},
-				-- linehl = {
-				-- 	[vim.diagnostic.severity.ERROR] = "DiagnosticError",
-				-- 	[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
-				-- 	[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
-				-- 	[vim.diagnostic.severity.HINT] = "DiagnosticHint",
-				-- },
-				numhl = {
-					[vim.diagnostic.severity.ERROR] = "DiagnosticError",
-					[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
-					[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
-					[vim.diagnostic.severity.HINT] = "DiagnosticHint",
-				},
-			},
-			underline = true,
-			-- virtual_lines = true,
-			virtual_text = true,
-		})
+		local x = vim.diagnostic.severity
 
+		vim.diagnostic.config({
+			virtual_text = { prefix = "" },
+			signs = { text = { [x.ERROR] = "󰅙", [x.WARN] = "", [x.INFO] = "󰋼", [x.HINT] = "󰌵" } },
+			underline = true,
+			float = { border = "single" },
+		})
 		-- Function to restart mojo LSP server if it crashes
 		local function restart_mojo_lsp()
 			-- Use `vim.schedule` to safely run the LspStart command

@@ -22,6 +22,11 @@ vim.api.nvim_set_keymap("n", "k", "kzz", { noremap = true, silent = true })
 -- Map leader+vv to edit Neovim config directory
 vim.keymap.set("n", "<leader>vv", ":e ~/.config/nvim/<CR>", { silent = true, desc = "Edit Neovim config" })
 
+-- lua helpers
+vim.keymap.set("n", "<space><space>x", "<cmd>source %<CR>")
+vim.keymap.set("n", "<space>x", ":.lua<CR>")
+vim.keymap.set("v", "<space>x", ":lua<CR>")
+vim.keymap.set("n", "<space>t", "<cmd>PlenaryBustedFile %<CR>")
 -- Map leader+vr to source the config files
 vim.keymap.set(
 	"n",
