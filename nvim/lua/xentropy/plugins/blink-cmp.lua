@@ -28,7 +28,7 @@ return {
 		keymap = {
 			["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
 			["<C-e>"] = { "hide" },
-			["<C-c>"] = { "select_and_accept" },
+			["<C-y>"] = { "select_and_accept" },
 
 			["<Up>"] = { "select_prev", "fallback" },
 			["<Down>"] = { "select_next", "fallback" },
@@ -108,6 +108,13 @@ return {
 		-- See the fuzzy documentation for more information
 		fuzzy = { implementation = "prefer_rust_with_warning" },
 		signature = { enabled = true },
+		cmdline = {
+			enabled = true,
+			keymap = {
+				preset = "inherit",
+			},
+			completion = { menu = { auto_show = true } },
+		},
 	},
 	opts_extend = { "sources.default" },
 }
