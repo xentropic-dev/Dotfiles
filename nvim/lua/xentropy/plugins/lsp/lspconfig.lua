@@ -80,6 +80,7 @@ return {
 		end
 
 		local util = require("lspconfig.util")
+		local omnisharp_bin = vim.fn.stdpath("data") .. "/mason/packages/omnisharp/omnisharp"
 
 		local lsp_opts = {
 			servers = {
@@ -120,6 +121,38 @@ return {
 						--- in a large project.
 						require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
 					end,
+				},
+				omnisharp = {
+					cmd = { omnisharp_bin, "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
+					enable_import_completion = true,
+					organize_imports_on_format = true,
+					enable_roslyn_analyzers = true,
+					root_dir = util.root_pattern("*.sln", "*.csproj", ".git"),
+					-- enable_import_completion = true,
+					-- organize_imports_on_format = true,
+					-- enable_roslyn_analyzers = true,
+					-- root_dir = function()
+					-- 	return util.root_pattern(
+					-- 		"*.sln",
+					-- 		"*.csproj",
+					-- 		"Directory.Build.props",
+					-- 		"Directory.Build.targets"
+					-- 	)(vim.fn.getcwd())
+					-- end,
+					-- enable_decompilation_support = true,
+					-- filetypes = {
+					-- 	"cs",
+					-- 	"vb",
+					-- 	"csproj",
+					-- 	"sln",
+					-- 	"slnx",
+					-- 	"props",
+					-- 	"csx",
+					-- 	"targets",
+					-- 	"tproj",
+					-- 	"slngen",
+					-- 	"fproj",
+					-- },
 				},
 			},
 		}
