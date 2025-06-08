@@ -11,9 +11,6 @@ return {
 		{ "antosha417/nvim-lsp-file-operations", config = true },
 	},
 	config = function()
-		local lspconfig = require("lspconfig")
-		local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
 		local keymap = vim.keymap -- for conciseness
 
 		vim.api.nvim_create_autocmd("LspAttach", {
@@ -65,9 +62,6 @@ return {
 			end,
 		})
 
-		-- used to enable autocompletion (assign to every lsp server config)
-		local capabilities = cmp_nvim_lsp.default_capabilities()
-
 		local x = vim.diagnostic.severity
 
 		vim.diagnostic.config({
@@ -86,48 +80,55 @@ return {
 		end
 
 		local util = require("lspconfig.util")
-		lspconfig.mojo.setup({
-			capabilities = capabilities,
-			root_dir = function(fname)
-				-- Use lspconfig's utility function to search for mojoproject.toml in parent directories
-				return util.root_pattern("mojoproject.toml")(fname) or util.find_git_ancestor(fname) or vim.fn.getcwd()
-			end,
-			-- Additional configuration (if needed)
-			on_attach = function(client, _)
-				print("Mojo LSP attached to " .. client.name)
-			end,
-			-- This is a workaround for the fact that the mojo lsp server
-			-- keeps crashing in neovim as of 12/2024.  I have an open issue
-			-- but no progress is being made.
-			on_exit = function(_, code, _)
-				if code ~= 0 then
-					print("mojo-lsp-server has crashed, restarting...")
-					restart_mojo_lsp()
-				end
-			end,
-		})
 
-		lspconfig.zls.setup({
-			cmd = { "zls" },
-			settings = {
+		local lsp_opts = {
+			servers = {
+				mojo = {
+					root_dir = function(fname)
+						-- Use lspconfig's utility function to search for mojoproject.toml in parent directories
+						return util.root_pattern("mojoproject.toml")(fname)
+							or util.find_git_ancestor(fname)
+							or vim.fn.getcwd()
+					end,
+					-- Additional configuration (if needed)
+					on_attach = function(client, _)
+						print("Mojo LSP attached to " .. client.name)
+					end,
+					-- This is a workaround for the fact that the mojo lsp server
+					-- keeps crashing in neovim as of 12/2024.  I have an open issue
+					-- but no progress is being made.
+					on_exit = function(_, code, _)
+						if code ~= 0 then
+							print("mojo-lsp-server has crashed, restarting...")
+							restart_mojo_lsp()
+						end
+					end,
+				},
 				zls = {
-					enable_build_on_save = true,
+					cmd = { "zls" },
+					settings = {
+						zls = {
+							enable_build_on_save = true,
+						},
+					},
+				},
+				ts_ls = {},
+				lua_ls = {
+					on_attach = function(client, bufnr)
+						--- This forces lua_ls to provide diagnostics for the entire workspace
+						--- instead of just the open buffers.  Handy for jumping through diagnostics
+						--- in a large project.
+						require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+					end,
 				},
 			},
-		})
+		}
+		local lspconfig = require("lspconfig")
+		local blink_cmp = require("blink.cmp")
 
-		--lspconfig.ts_ls.setup({})
-
-		local ok, mason_registry = pcall(require, "mason-registry")
-		if not ok then
-			vim.notify("mason-registry could not be loaded")
-			return
+		for server, config in pairs(lsp_opts.servers) do
+			config.capabilities = blink_cmp.get_lsp_capabilities(config.capabilities)
+			lspconfig[server].setup(config)
 		end
-
-		lspconfig.ts_ls.setup({})
-
-		lspconfig.lua_ls.setup({
-			capabilities = capabilities,
-		})
 	end,
 }

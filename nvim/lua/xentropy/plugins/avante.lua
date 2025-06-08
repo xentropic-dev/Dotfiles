@@ -7,12 +7,16 @@ return {
 		-- for example
 		provider = "claude",
 		mode = "agentic",
-		claude = {
-			endpoint = "https://api.anthropic.com",
-			model = "claude-3-7-sonnet-latest", -- your desired model (or use gpt-4o, etc.)
-			timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
-			temperature = 0,
-			max_tokens = 4096,
+		providers = {
+			claude = {
+				endpoint = "https://api.anthropic.com",
+				model = "claude-3-7-sonnet-latest", -- your desired model (or use gpt-4o, etc.)
+				timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
+				extra_request_body = {
+					max_tokens = 4096,
+					temperature = 0,
+				},
+			},
 		},
 	},
 	-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
